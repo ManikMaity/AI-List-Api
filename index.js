@@ -1,5 +1,6 @@
 const express = require("express");
 const fs = require("fs");
+const { loginMiddleware } = require("./middleware");
 const app = express();
 app.use(express.json());
 
@@ -8,6 +9,26 @@ app.get("/", (req, res) => {
     msg: "working",
   });
 });
+
+
+app.post("/login", loginMiddleware, (req, res) => {
+    try{
+        const email = req.body.email;
+        const password = req.body.password.toString();
+        const allDataJson = fs.readFileSync("./loginData.json");
+        const allUserData  =  JSON.parse(allDataJson);
+        allUserData.push({email, password});
+        fs.writeFileSync("./loginData.json", JSON.stringify(allUserData, null, 3));
+        res.json({
+            msg : "Login successful, please sign in using this email & password"
+        });
+    }
+    catch(err){
+        res.status(404).json({err});
+    }
+
+})
+
 
 // get all ai data
 app.get("/alldata", (req, res) => {
