@@ -58,4 +58,40 @@ app.get("/pages", (req, res) => {
   }
 });
 
+
+// search
+app.get("/search", (req, res) => {
+    try{
+        const searchData = req.query.name;
+        const allAiDataJson = fs.readFileSync("./formatedData.json");
+        const allAiData = JSON.parse(allAiDataJson);
+        const foundData = allAiData.find(ai => ai.name.toString().toLowerCase() == searchData.toLowerCase());
+       if (searchData){
+        res.json(foundData);
+       }
+       else {
+        res.json([]);
+       }
+    }
+    catch(err){
+        res.status(404).json({ msg: err });
+    }
+ 
+});
+
+// releted name search
+app.get("/related", (req, res) => {
+    try{
+        const searchData = req.query.name.toLowerCase();
+        const allAiDataJson = fs.readFileSync("./formatedData.json");
+        const allAiData = JSON.parse(allAiDataJson);
+        const relatedData = allAiData.filter(ai => ai.name.toLowerCase().includes(searchData));
+        res.json(relatedData);
+    }
+    catch(err){
+        res.status(404).json({ msg: err });
+
+    }
+})
+
 app.listen(3000);
