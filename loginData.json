@@ -1,6 +1,12 @@
 [
    {
       "email": "manikmaity@gmail.com",
-      "password": "2111545454"
+      "password": "2111545454",
+      "token": "b1bee661-9f46-4142-8b18-d704fb7d0879"
+   },
+   {
+      "email": "suman@gmail.com",
+      "password": "2111545454",
+      "token": "0a198d28-9670-436d-82c3-25dc6cd2bcb0"
    }
 ]

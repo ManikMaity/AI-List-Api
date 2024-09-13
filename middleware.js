@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 function loginMiddleware(req, res, next){
     const email = req.body.email;
     const password = req.body.password.toString();
@@ -10,6 +12,21 @@ function loginMiddleware(req, res, next){
 
 }
 
+
+
+function authenticationMiddleware(req, res, next){
+    const token = req.headers.token;
+    const allUserDataJson = fs.readFileSync("./loginData.json");
+    const allUserData = JSON.parse(allUserDataJson);
+    const findToken = allUserData.find(user => user.token == token);
+    if (!findToken){
+        res.status(404).json({msg : "Token not found"})
+    }
+    else {
+        next();
+    }
+}
+
 const validateEmail = (email) => {
     return String(email)
       .toLowerCase()
@@ -18,4 +35,6 @@ const validateEmail = (email) => {
       );
   };
 
-  module.exports = {loginMiddleware}
+
+
+  module.exports = {loginMiddleware, authenticationMiddleware}
